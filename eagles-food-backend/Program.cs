@@ -3,6 +3,8 @@ global using AutoMapper;
 using System.Reflection;
 using System.Text;
 
+using Asp.Versioning;
+
 using eagles_food_backend;
 using eagles_food_backend.Data;
 using eagles_food_backend.Services;
@@ -97,6 +99,21 @@ builder.Services.AddSwaggerGen(opts =>
         Version = "v1"
     });
 });
+builder.Services.AddApiVersioning(o =>
+{
+    o.AssumeDefaultVersionWhenUnspecified = true;
+    o.DefaultApiVersion = new ApiVersion(1, 0);
+    o.ReportApiVersions = true;
+}).AddApiExplorer(options =>
+{
+    // Add the versioned API explorer, which also adds IApiVersionDescriptionProvider service
+    // note: the specified format code will format the version as "'v'major[.minor][-status]"
+    options.GroupNameFormat = "'v'VVV";
+
+    // note: this option is only necessary when versioning by url segment. the SubstitutionFormat
+    // can also be used to control the format of the API version in route templates
+    options.SubstituteApiVersionInUrl = true;
+}).AddMvc();
 
 builder.Services.AddControllersWithViews()
     .AddNewtonsoftJson(options =>

@@ -1,8 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
+
+using Asp.Versioning;
+
 using eagles_food_backend.Domains.DTOs;
 using eagles_food_backend.Domains.Filters;
 using eagles_food_backend.Services.UserServices;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,8 +15,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace eagles_food_backend.Controllers
 {
-    [Route("api/user")]
+    [Route("api/v{version:apiVersion}/user")]
     [ApiController]
+    [ApiVersion("1.0")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class UsersController : ControllerBase
     {
@@ -142,7 +147,7 @@ namespace eagles_food_backend.Controllers
             var response = await _userService.SearchForUser(email);
             return StatusCode((int)response.statusCode, response);
         }
-        
+
         /// <summary>
         /// Search for a user by their name
         /// </summary>
